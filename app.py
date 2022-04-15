@@ -1,10 +1,15 @@
 from matplotlib import pyplot as plt
+from configuration import skywater_configuration
 from services.ExtractSParameters import ExtractSParametersService
-from subCircuits.TestSubCircuit import TestSubCircuit
+from subCircuits.TestSubCircuit import LNASubCircuit
 
-test_subcircuit = TestSubCircuit("test")
+test_subcircuit = LNASubCircuit(
+    "test",
+    nfet_type=skywater_configuration.nfet_type,
+    pfet_type=skywater_configuration.pfet_type,
+)
 s_parameters = ExtractSParametersService.execute(
-    test_subcircuit, 2.5e6, 250e6, 100
+    test_subcircuit, 2.3e9, 2.5e9, 100
 )
 
 

@@ -1,6 +1,7 @@
 from typing import Literal
-from PySpice.Spice.Netlist import Circuit, SubCircuit
+from PySpice.Spice.Netlist import SubCircuit
 import numpy as np
+from circuits import Circuit
 from entities import SParameters
 from services.SimulateAC import SimulateACService
 from subCircuits import SPARAM
