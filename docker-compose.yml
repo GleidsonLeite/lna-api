@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  lna_api:
+    build: .
+    container_name: "lna-api"
+    restart: "always"
+    environment:
+      - FLASK_APP=./src/app.py
+      - FLASK_ENV=development
+    ports:
+      - 3333:5000
+    volumes:
+      - ./src:/usr/app/src
+    deploy:
+      resources:
+        limits:
+          cpus: 2
+          memory: 1024M
+        reservations:
+          cpus: 0.25
+          memory: 128M

@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
-from configuration import skywater_configuration
-from services.ExtractSParameters import ExtractSParametersService
-from subCircuits.TestSubCircuit import LNASubCircuit
+from src.configuration import skywater_configuration
+from src.services.ExtractSParameters import ExtractSParametersService
+from src.subCircuits.LNA import LNASubCircuit
 
 test_subcircuit = LNASubCircuit(
     "test",

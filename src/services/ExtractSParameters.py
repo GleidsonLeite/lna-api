@@ -22,7 +22,6 @@ class ExtractSParametersService:
         nominal_temperature: float = 25,
         variation: Literal["dec", "oct", "lin"] = "lin",
     ) -> SParameters:
-
         circuit = Circuit("Test")
         sparam = SPARAM("sparam")
         circuit.subcircuit(sparam)

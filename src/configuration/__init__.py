@@ -11,6 +11,6 @@ class SkyWaterConfiguration:
 
 skywater_configuration = SkyWaterConfiguration(
     libraries=[
-        "/home/gleidson/skywater-pdk/libraries/sky130_fd_pr/latest/models/corners/tt.spice"
+        "/edatools/skywater-pdk/libraries/sky130_fd_pr/latest/models/corners/tt.spice"
     ]
 )
