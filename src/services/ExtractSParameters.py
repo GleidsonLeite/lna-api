@@ -41,8 +41,18 @@ class ExtractSParametersService:
             variation=variation,
         )
 
-        sparam.Vdc.dc_value = np.abs(analysis.nodes["x1.1"].as_ndarray())[0]
-        sparam.Vacdc.dc_value = np.abs(analysis.nodes["x1.8"].as_ndarray())[0]
+        circuit = Circuit("Test")
+        sparam = SPARAM(
+            "sparam",
+            Vbias_in=np.abs(analysis.nodes["x1.8"].as_ndarray())[0],
+            Vbias_out=np.abs(analysis.nodes["x1.1"].as_ndarray())[0],
+        )
+        circuit.subcircuit(sparam)
+        circuit.subcircuit(sub_circuit)
+
+        circuit.X(1, "sparam", "in", "out", "S22", "S12")
+        circuit.X(2, sub_circuit.name, "in", "out")
+
         sparam.RS1.resistance = 1e12
         sparam.RS2.resistance = 1e12
         sparam.RS3.resistance = 1e-3
@@ -61,10 +71,10 @@ class ExtractSParametersService:
 
         s_parameters = SParameters(
             frequency=analysis.frequency,
-            S11=analysis2.s12.as_ndarray(),
-            S12=analysis.s12.as_ndarray(),
-            S21=analysis2.s22.as_ndarray(),
-            S22=analysis.s22.as_ndarray(),
+            S11=analysis.s22.as_ndarray(),
+            S12=analysis2.s12.as_ndarray(),
+            S21=analysis.s12.as_ndarray(),
+            S22=analysis2.s22.as_ndarray(),
         )
 
         return s_parameters
