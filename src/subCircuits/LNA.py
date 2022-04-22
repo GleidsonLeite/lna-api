@@ -43,17 +43,6 @@ class LNASubCircuit(SubCircuit):
             0,
             L=l1,
             W=w1,
-            ad="'W*0.29'",
-            pd="'2*(W+0.29)'",
-            as_="'W*0.29'",
-            ps="'2*(W+0.29)'",
-            nrd="'0.29/W'",
-            nrs="'0.29/W'",
-            sa=0,
-            sb=0,
-            sd=0,
-            nf=1,
-            mult=1,
         )
 
         self.C("C1", "PC1", "PLG", c1)
@@ -65,20 +54,9 @@ class LNASubCircuit(SubCircuit):
             "VCC",
             "PC1",
             "PRF",
-            0,
+            "VCC",
             L=l2,
             W=w2,
-            ad="'W*0.29'",
-            pd="'2*(W+0.29)'",
-            as_="'W*0.29'",
-            ps="'2*(W+0.29)'",
-            nrd="'0.29/W'",
-            nrs="'0.29/W'",
-            sa=0,
-            sb=0,
-            sd=0,
-            nf=1,
-            mult=1,
         )
         self.C("CDEC", "VCC", 0, cdec)
         self.C("CM1", "PRF", "PCM1", cm1)
@@ -93,17 +71,6 @@ class LNASubCircuit(SubCircuit):
             0,
             L=l3,
             W=w3,
-            ad="'W*0.29'",
-            pd="'2*(W+0.29)'",
-            as_="'W*0.29'",
-            ps="'2*(W+0.29)'",
-            nrd="'0.29/W'",
-            nrs="'0.29/W'",
-            sa=0,
-            sb=0,
-            sd=0,
-            nf=1,
-            mult=1,
         )
         self.L("LPK", "VDD", "PM3", lpk)
         self.C("CM2", "PM3", "OUT", cm2)
