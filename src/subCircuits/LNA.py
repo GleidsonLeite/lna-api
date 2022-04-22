@@ -51,10 +51,10 @@ class LNASubCircuit(SubCircuit):
         self.X(
             "M2",
             pfet_type,
-            "VCC",
-            "PC1",
             "PRF",
+            "PC1",
             "VCC",
+            0,
             L=l2,
             W=w2,
         )
