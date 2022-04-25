@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM nvidia/cuda:11.6.0-runtime-ubuntu20.04
 
 # Updating image
 RUN apt -y update
@@ -6,16 +6,37 @@ RUN apt -y update
 # Upgrading image
 RUN apt -y upgrade
 
+# Installing python
+RUN apt-get install -y python3.8
+RUN apt-get install -y python3-pip
 # Upgrading image
 RUN pip3 install --upgrade pip
-
-# Installing ngspice
-RUN apt-get -y install ngspice
-RUN apt-get -y install libngspice0-dev
-RUN apt-get -y install libngspice0
-# Installing skywater
 WORKDIR /edatools
 
+# Installing git
+RUN apt install -y git
+
+# Installing essentials
+RUN apt-get install -y build-essential
+
+# Installing ngspice
+RUN git clone https://github.com/ngspice/ngspice
+WORKDIR /edatools/ngspice
+
+RUN apt-get install -y libreadline6-dev libx11-dev libice-dev libxext-dev libxmu-dev autoconf libtool automake bison byacc
+RUN ./autogen.sh
+RUN mkdir release
+RUN ls
+WORKDIR /edatools/ngspice/release
+RUN ../configure --with-x --with-readline=yes --disable-debug --enable-openmp --with-ngshared --enable-cider --prefix=/usr/local
+RUN make
+RUN make install
+
+RUN apt-get -y install libngspice0-dev
+RUN apt-get -y install libngspice0
+
+# Installing skywater
+WORKDIR /edatools
 RUN git clone https://github.com/google/skywater-pdk.git 
 
 WORKDIR /edatools/skywater-pdk

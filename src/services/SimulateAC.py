@@ -1,5 +1,6 @@
 from PySpice.Probe.WaveForm import AcAnalysis
 from PySpice.Spice.Netlist import Circuit
+from PySpice.Spice.NgSpice.Shared import NgSpiceShared
 from typing import Literal
 
 
@@ -23,11 +24,23 @@ class SimulateACService:
             nominal_temperature=nominal_temperature,
         )
 
-        analysis = simulator.ac(
-            start_frequency=start_frequency,
-            stop_frequency=stop_frequency,
-            number_of_points=number_of_points,
-            variation=variation,
-        )
+        try:
+            analysis = simulator.ac(
+                start_frequency=start_frequency,
+                stop_frequency=stop_frequency,
+                number_of_points=number_of_points,
+                variation=variation,
+            )
+        except Exception as exception:
+            ngspice: NgSpiceShared = simulator.ngspice
+            try:
+                ngspice.quit()
+            except:
+                pass
+            raise exception
+
+        ngspice: NgSpiceShared = simulator.ngspice
+        ngspice.remove_circuit()
+        ngspice.destroy()
 
         return analysis

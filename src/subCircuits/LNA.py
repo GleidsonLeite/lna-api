@@ -54,7 +54,7 @@ class LNASubCircuit(SubCircuit):
             "PRF",
             "PC1",
             "VCC",
-            0,
+            "VCC",
             L=l2,
             W=w2,
         )
