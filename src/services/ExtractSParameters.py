@@ -1,6 +1,5 @@
 from typing import Literal
 from PySpice.Spice.Netlist import SubCircuit
-import numpy as np
 from circuits import Circuit
 from entities import SParameters
 from services.SimulateAC import SimulateACService
@@ -22,14 +21,34 @@ class ExtractSParametersService:
         nominal_temperature: float = 25,
         variation: Literal["dec", "oct", "lin"] = "lin",
     ) -> SParameters:
+
         circuit = Circuit("Test")
-        sparam = SPARAM("sparam")
+        sparam = SPARAM("sparam", Vbias_in=1)
         circuit.subcircuit(sparam)
         circuit.subcircuit(sub_circuit)
 
-        circuit.X(1, "sparam", "in", "out", "S22", "S12")
-        circuit.X(2, sub_circuit.name, "in", "out")
+        circuit.X(1, sparam.name, "inp", "out")
+        circuit.X(2, sub_circuit.name, "inp", "out")
+        analysis = SimulateACService.execute(
+            circuit=circuit,
+            start_frequency=start_frequency,
+            stop_frequency=stop_frequency,
+            number_of_points=number_of_points,
+            simulator=simulator,
+            nominal_temperature=nominal_temperature,
+            temperature=temperature,
+            variation=variation,
+        )
+        S11 = 2 * analysis.inp.as_ndarray() - 1
+        S21 = 2 * analysis.out.as_ndarray()
 
+        circuit = Circuit("Test")
+        sparam = SPARAM("sparam", Vbias_out=1)
+        circuit.subcircuit(sparam)
+        circuit.subcircuit(sub_circuit)
+
+        circuit.X(1, sparam.name, "inp", "out")
+        circuit.X(2, sub_circuit.name, "inp", "out")
         analysis = SimulateACService.execute(
             circuit=circuit,
             start_frequency=start_frequency,
@@ -41,40 +60,15 @@ class ExtractSParametersService:
             variation=variation,
         )
 
-        circuit = Circuit("Test")
-        sparam = SPARAM(
-            "sparam",
-            Vbias_in=np.abs(analysis.nodes["x1.8"].as_ndarray())[0],
-            Vbias_out=np.abs(analysis.nodes["x1.1"].as_ndarray())[0],
-        )
-        circuit.subcircuit(sparam)
-        circuit.subcircuit(sub_circuit)
-
-        circuit.X(1, "sparam", "in", "out", "S22", "S12")
-        circuit.X(2, sub_circuit.name, "in", "out")
-
-        sparam.RS1.resistance = 1e12
-        sparam.RS2.resistance = 1e12
-        sparam.RS3.resistance = 1e-3
-        sparam.RS4.resistance = 1e-3
-
-        analysis2 = SimulateACService.execute(
-            circuit=circuit,
-            start_frequency=start_frequency,
-            stop_frequency=stop_frequency,
-            number_of_points=number_of_points,
-            simulator=simulator,
-            nominal_temperature=nominal_temperature,
-            temperature=temperature,
-            variation=variation,
-        )
+        S12 = 2 * analysis.inp.as_ndarray()
+        S22 = 2 * analysis.out.as_ndarray() - 1
 
         s_parameters = SParameters(
             frequency=analysis.frequency,
-            S11=analysis.s22.as_ndarray(),
-            S12=analysis2.s12.as_ndarray(),
-            S21=analysis.s12.as_ndarray(),
-            S22=analysis2.s22.as_ndarray(),
+            S11=S11,
+            S12=S12,
+            S21=S21,
+            S22=S22,
         )
 
         return s_parameters
