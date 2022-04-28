@@ -25,6 +25,16 @@ def hello_world():
         vpol1=body_request["vpol1"],
         w1=body_request["w1"],
         w2=body_request["w2"],
+        lpk=body_request["lpk"],
+        cm2=body_request["cm2"],
+        cm1=body_request["cm1"],
+        l3=body_request["l3"],
+        rpol2=body_request["rpol2"],
+        vpol2=body_request["vpol2"],
+        w3=body_request["w3"],
+        cm3=body_request["cm3"],
+        vdd=body_request["vdd"],
+        vcc=body_request["vcc"],
     )
 
     try:
