@@ -7,7 +7,6 @@ from subCircuits.LNA import LNASubCircuit
 
 app = Flask(__name__)
 
-
 @app.route("/", methods=["POST"])
 def hello_world():
     body_request = request.json

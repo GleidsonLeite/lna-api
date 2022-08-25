@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.6.0-runtime-ubuntu20.04
+FROM python:3
 
 # Updating image
 RUN apt -y update
@@ -6,11 +6,11 @@ RUN apt -y update
 # Upgrading image
 RUN apt -y upgrade
 
-# Installing python
-RUN apt-get install -y python3.8
-RUN apt-get install -y python3-pip
-# Upgrading image
-RUN pip3 install --upgrade pip
+# # Installing python
+# RUN apt-get install -y python3
+# RUN apt-get install -y python3-pip
+# # Upgrading image
+# RUN pip3 install --upgrade pip
 WORKDIR /edatools
 
 # Installing git
@@ -59,4 +59,4 @@ EXPOSE 5000
 
 ENV FLASK_APP="/usr/app/src/app.py"
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD [ "flask", "--debug", "run", "--port=3333", "--host=0.0.0.0" ]
