@@ -55,7 +55,7 @@ RUN pyspice-post-installation --check-install
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 3333
 
 ENV FLASK_APP="/usr/app/src/app.py"
 
