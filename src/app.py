@@ -3,9 +3,47 @@ from flask import Flask, request, jsonify
 from configuration import skywater_configuration
 from services.ExtractSParameters import ExtractSParametersService
 from subCircuits.LNA import LNASubCircuit
+from subCircuits.RLC import RLCSubCircuit
 
 
 app = Flask(__name__)
+
+
+@app.route("/RLC", methods=["POST"])
+def simulate_rlc():
+    body_request = request.json
+    rlc = RLCSubCircuit(
+        name="rlcSubCircuit",
+        capacitance=body_request["c"],
+        inductance=body_request["l"],
+        resistance=body_request["r"],
+    )
+
+    try:
+        s_parameters = ExtractSParametersService.execute(
+            rlc,
+            start_frequency=body_request["startFrequency"],
+            stop_frequency=body_request["stopFrequency"],
+            number_of_points=int(body_request["simulationPoints"]),
+            variation=body_request["simulationVariation"],
+        )
+    except Exception as exception:
+        print(exception)
+        return jsonify({"error": True})
+    return (
+        jsonify(
+            {
+                "frequency": s_parameters.frequency.tolist(),
+                "S11": s_parameters.S11_db.tolist(),
+                "S12": s_parameters.S12_db.tolist(),
+                "S21": s_parameters.S21_db.tolist(),
+                "S22": s_parameters.S22_db.tolist(),
+                "error": False,
+            }
+        ),
+        201,
+    )
+
 
 @app.route("/", methods=["POST"])
 def hello_world():
