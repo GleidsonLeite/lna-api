@@ -8,7 +8,6 @@ test_subcircuit = LNASubCircuit(
     nfet_type=skywater_configuration.nfet_type,
     pfet_type=skywater_configuration.pfet_type,
     c1=1.760011623829603e-11,
-    cdec=1e-6,
     cm1=1.7124060225486756e-11,
     cm2=1.8947868962883948e-11,
     cm3=5.416065746545791e-13,
@@ -25,6 +24,8 @@ test_subcircuit = LNASubCircuit(
     w1=93.52270918190479,
     w2=10.99694906949997,
     w3=91.55357965350152,
+    vcc=1.8,
+    vdd=1.8,
 )
 s_parameters = ExtractSParametersService.execute(test_subcircuit, 1, 3e9, 1000)
 

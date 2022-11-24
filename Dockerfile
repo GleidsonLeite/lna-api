@@ -49,14 +49,14 @@ WORKDIR /usr/app
 
 COPY requirements.txt .
 
-RUN pip3 install -r requirements.txt
+# RUN pip3 install -r requirements.txt
 
-RUN pyspice-post-installation --check-install
+# RUN pyspice-post-installation --check-install
 
-COPY . .
+# COPY . .
 
-EXPOSE 3333
+# EXPOSE 3333
 
-ENV FLASK_APP="/usr/app/src/app.py"
+# ENV FLASK_APP="/usr/app/src/app.py"
 
-CMD [ "flask", "--debug", "run", "--port=3333", "--host=0.0.0.0" ]
+# CMD [ "flask", "--debug", "run", "--port=3333", "--host=0.0.0.0" ]
